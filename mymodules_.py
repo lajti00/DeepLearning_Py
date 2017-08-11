@@ -37,10 +37,10 @@ def bdPixel_searcher(imVectorArray, sigma, iters, imDim, visualisation, imageVal
     px_sd=imVectorArray.std(axis=1)
     print('Menan: '+str(px_mean.mean()))
     print('SD_mean: '+str(px_sd.mean()))
-    
-    plt.plot(px_mean)
-    plt.ylabel('SD')
-    plt.show()
+    if visualisation:
+        plt.plot(px_mean)
+        plt.ylabel('SD')
+        plt.show()
     
     
     # Find the pixels with too high and too low sd

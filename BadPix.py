@@ -15,32 +15,33 @@ import mymodules_ as mm
 
 # Open the images
 [filePath, DirPath] = mm.openFileDia("D:/Python/Data/", "*.tif")
-[Ref_filePath, Ref_dirPath] = mm.openFileDia("D:/Python/Data/", "*.png")
-imR = cv2.imread(Ref_filePath,-1)
-rot_imR = np.rot90(imR,3)
+#[Ref_filePath, Ref_dirPath] = mm.openFileDia("D:/Python/Data/", "*.png")
+#imR = cv2.imread(Ref_filePath,-1)
+#rot_imR = np.rot90(imR,3)
 
 # global variables
 numberOfIm = 15
+numberOfRun = 20
 imDim = np.array([512,640])
+BadPixMap=np.zeros(imDim[0]*imDim[1],np.uint8)
 
+imArray=np.zeros((imDim[0],imDim[1],numberOfIm),dtype=np.int16)
+imVectorArray = np.zeros((imDim[0]*imDim[1],numberOfIm),dtype=np.double)
 
-imArray=np.zeros((512,640,numberOfIm),dtype=np.int16)
-imVectorArray = np.zeros((512*640,numberOfIm),dtype=np.double)
-for i in range(0, numberOfIm+1):
-    filename = filename = DirPath+'image_'+("%0.6o"% (i))+'.tif.tif'
-    #print(filename)
-    imArray[:,:,i-1] = cv2.imread(filename,-1)
-    imVectorArray[:,i-1]  = cv2.imread(filename,-1).reshape(512*640)
-    cv2.imshow('image',imArray[:,:,i-1])
-    cv2.waitKey(10)
-#     cv2.destroyAllWindows()
-#     print(i)
-    if i==numberOfIm:
-        print('images are loaded: i='+str(i))
-        cv2.destroyAllWindows()
-
-BadPixMap = mm.bdPixel_searcher(imVectorArray, 3, 2, imDim, False, 255)
-
+for j in range(0,numberOfRun):
+    for i in range(0, numberOfIm):
+        range(j*numberOfIm, j*numberOfIm+numberOfIm)
+        filename = DirPath+'image_'+("%0.6i"% (j*numberOfIm+i))+'.tif.tif'
+        print(filename)
+        imArray[:,:,i] = cv2.imread(filename,-1)
+        imVectorArray[:,i]  = cv2.imread(filename,-1).reshape(imDim[0]*imDim[1])
+        cv2.imshow('image',imArray[:,:,i])
+        cv2.waitKey(10)
+        if i==numberOfIm-1:
+            print('images are loaded: i='+str(i)+' last im name: '+filename)
+            cv2.destroyAllWindows()
+    print(j)   
+    BadPixMap = mm.bdPixel_searcher(imVectorArray, 4, 1, imDim, False, 255)
 
 
 
