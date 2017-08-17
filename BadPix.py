@@ -21,9 +21,9 @@ import mymodules_ as mm
 
 # global variables
 numberOfIm = 15
-numberOfRun = 20
+numberOfRun = 30
 imDim = np.array([512,640])
-BadPixMap=np.zeros(imDim[0]*imDim[1],np.uint8)
+BadPixMap=np.zeros([imDim[0],imDim[1]],np.uint8)
 
 imArray=np.zeros((imDim[0],imDim[1],numberOfIm),dtype=np.int16)
 imVectorArray = np.zeros((imDim[0]*imDim[1],numberOfIm),dtype=np.double)
@@ -41,7 +41,9 @@ for j in range(0,numberOfRun):
             print('images are loaded: i='+str(i)+' last im name: '+filename)
             cv2.destroyAllWindows()
     print(j)   
-    BadPixMap = mm.bdPixel_searcher(imVectorArray, 4, 1, imDim, False, 255)
+    BadPixMap = BadPixMap + mm.bdPixel_searcher(imVectorArray, 4, 1, imDim, False, 1)
+    #print(BadPixMap_tmp.shape)
+    #BadPixMap = BadPixMap + 
 
 
 
