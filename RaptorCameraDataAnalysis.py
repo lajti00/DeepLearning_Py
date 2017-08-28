@@ -44,12 +44,14 @@ SensorTemp = []
 PCBTemp = []
 MeasFlag = []
 
-numberOfIm = 13417
+numberOfIm = 13412
 numberOfRun = 1
 imDim = np.array([512,640])
 BadPixMap=np.zeros([imDim[0],imDim[1]],np.uint8)
-imArray=np.zeros((imDim[0],imDim[1],numberOfIm),dtype=np.int16)
-imVectorArray = np.zeros((imDim[0]*imDim[1],numberOfIm),dtype=np.double)
+#imArray=np.zeros((imDim[0],imDim[1],numberOfIm),dtype=np.int16)
+#imVectorArray = np.zeros((imDim[0]*imDim[1],numberOfIm),dtype=np.double)
+imArray=np.zeros((imDim[0],imDim[1]),dtype=np.int16)
+imVectorArray = np.zeros((imDim[0]*imDim[1]),dtype=np.double)
 CameraLog = False;
 Darkflag = True;
 MeasIDs = [1,2,3,4]
@@ -78,8 +80,8 @@ for j in range(0,numberOfRun):
         range(j*numberOfIm, j*numberOfIm+numberOfIm)
         filename = DirPath+'image'+("%0.5i"% (j*numberOfIm+i))+'.fits'
         print(filename)
-        imArray[:,:,i] = fits.getdata(filename)
-        imVectorArray[:,i]  = imArray[:,:,i].reshape(imDim[0]*imDim[1])
+        imArray[:,:] = fits.getdata(filename)
+        imVectorArray  = imArray[:].reshape(imDim[0]*imDim[1])
         # Data frame elements
         Index.append(counter)
         ImID.append(filename)
@@ -93,15 +95,15 @@ for j in range(0,numberOfRun):
         if len(DarkAve)>0:
             previousMed = DarkMed[-1]
         else:
-            previousMed = np.median(imVectorArray[:,i])
+            previousMed = np.median(imVectorArray)
         
-        DarkAve.append(imVectorArray[:,i].mean())
-        DarkMed.append(np.median(imVectorArray[:,i]))
-        DarkStd.append(imVectorArray[:,i].std())
-        DarkMin.append(imVectorArray[:,i].min())
-        DarkMax.append(imVectorArray[:,i].max())
-        SatPixels.append(len(imVectorArray[imVectorArray[:,i]>=15490,i]))
-        ZeroPixels.append(len(imVectorArray[imVectorArray[:,i]<=10,i]))
+        DarkAve.append(imVectorArray.mean())
+        DarkMed.append(np.median(imVectorArray))
+        DarkStd.append(imVectorArray.std())
+        DarkMin.append(imVectorArray.min())
+        DarkMax.append(imVectorArray.max())
+        SatPixels.append(len(imVectorArray[imVectorArray>=15490]))
+        ZeroPixels.append(len(imVectorArray[imVectorArray<=10]))
         SensorTemp.append(float(df_camera['5'][j*numberOfIm+i].split(':')[1].split('\t')[0]))
         PCBTemp.append(float(df_camera['7'][j*numberOfIm+i].split(':')[1].split('\t')[0]))
         print(cc)
